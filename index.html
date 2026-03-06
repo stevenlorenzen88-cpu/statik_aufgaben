@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statik-Aufgaben</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Statik-Aufgaben</h1>
+        <p class="subtitle">Schnelle Berechnungen für die Baustatik</p>
+    </header>
+
+    <main>
+        <!-- Aufgaben-Übersicht (Startseite) -->
+        <section id="overview" class="view active">
+            <div class="card-grid">
+                <button class="task-card" data-task="auflager">
+                    <div class="card-icon">⚖</div>
+                    <h2>Auflager&shy;reaktionen</h2>
+                    <p>Berechnung der Auflagerkräfte für Einfeldträger</p>
+                </button>
+
+                <button class="task-card" data-task="kraeftezerlegung">
+                    <div class="card-icon">↗</div>
+                    <h2>Kräfte&shy;zerlegung</h2>
+                    <p>Zerlegung einer Kraft in x- und y-Komponenten</p>
+                </button>
+
+                <button class="task-card" data-task="moment">
+                    <div class="card-icon">↻</div>
+                    <h2>Moment&shy;berechnung</h2>
+                    <p>Berechnung des Moments um einen Punkt</p>
+                </button>
+
+                <button class="task-card" data-task="flaechentraegheit">
+                    <div class="card-icon">▭</div>
+                    <h2>Flächen&shy;trägheits&shy;moment</h2>
+                    <p>Berechnung für Rechteck- und Kreisquerschnitte</p>
+                </button>
+
+                <button class="task-card" data-task="spannung">
+                    <div class="card-icon">⟷</div>
+                    <h2>Normal&shy;spannung</h2>
+                    <p>Berechnung der Normalspannung bei Biegung</p>
+                </button>
+
+                <button class="task-card" data-task="durchbiegung">
+                    <div class="card-icon">⌢</div>
+                    <h2>Durch&shy;biegung</h2>
+                    <p>Maximale Durchbiegung eines Einfeldträgers</p>
+                </button>
+            </div>
+        </section>
+
+        <!-- Auflagerreaktionen -->
+        <section id="task-auflager" class="view task-view">
+            <nav class="breadcrumb">
+                <button class="back-btn" data-back>← Übersicht</button>
+                <span>Auflagerreaktionen</span>
+            </nav>
+            <div class="task-layout">
+                <div class="task-input">
+                    <h2>Einfeldträger mit Einzellast</h2>
+                    <div class="sketch">
+                        <pre>
+        F
+        ↓
+   ┌────┼──────────┐
+   △    a     b    ▽
+   A←─────L──────→B
+                        </pre>
+                    </div>
+                    <form id="form-auflager" class="input-form">
+                        <div class="input-group">
+                            <label for="auflager-F">Kraft F [kN]</label>
+                            <input type="number" id="auflager-F" step="any" required placeholder="z.B. 10">
+                        </div>
+                        <div class="input-group">
+                            <label for="auflager-L">Trägerlänge L [m]</label>
+                            <input type="number" id="auflager-L" step="any" required placeholder="z.B. 6">
+                        </div>
+                        <div class="input-group">
+                            <label for="auflager-a">Abstand a [m]</label>
+                            <input type="number" id="auflager-a" step="any" required placeholder="z.B. 2">
+                        </div>
+                        <div class="btn-row">
+                            <button type="submit" class="btn-primary">Berechnen</button>
+                            <button type="reset" class="btn-secondary">Zurücksetzen</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="task-result" id="result-auflager"></div>
+            </div>
+        </section>
+
+        <!-- Kräftezerlegung -->
+        <section id="task-kraeftezerlegung" class="view task-view">
+            <nav class="breadcrumb">
+                <button class="back-btn" data-back>← Übersicht</button>
+                <span>Kräftezerlegung</span>
+            </nav>
+            <div class="task-layout">
+                <div class="task-input">
+                    <h2>Kraft in Komponenten zerlegen</h2>
+                    <div class="sketch">
+                        <pre>
+        y
+        ↑  F
+        │ ╱
+        │╱ α
+        └──────→ x
+                        </pre>
+                    </div>
+                    <form id="form-kraeftezerlegung" class="input-form">
+                        <div class="input-group">
+                            <label for="kraft-F">Kraft F [kN]</label>
+                            <input type="number" id="kraft-F" step="any" required placeholder="z.B. 10">
+                        </div>
+                        <div class="input-group">
+                            <label for="kraft-alpha">Winkel α [°]</label>
+                            <input type="number" id="kraft-alpha" step="any" required placeholder="z.B. 30">
+                        </div>
+                        <div class="btn-row">
+                            <button type="submit" class="btn-primary">Berechnen</button>
+                            <button type="reset" class="btn-secondary">Zurücksetzen</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="task-result" id="result-kraeftezerlegung"></div>
+            </div>
+        </section>
+
+        <!-- Momentberechnung -->
+        <section id="task-moment" class="view task-view">
+            <nav class="breadcrumb">
+                <button class="back-btn" data-back>← Übersicht</button>
+                <span>Momentberechnung</span>
+            </nav>
+            <div class="task-layout">
+                <div class="task-input">
+                    <h2>Moment um einen Punkt</h2>
+                    <div class="sketch">
+                        <pre>
+       F
+       ↓
+   ────┼──── ⟳ M = F · d
+       │
+       ←d→ O
+                        </pre>
+                    </div>
+                    <form id="form-moment" class="input-form">
+                        <div class="input-group">
+                            <label for="moment-F">Kraft F [kN]</label>
+                            <input type="number" id="moment-F" step="any" required placeholder="z.B. 5">
+                        </div>
+                        <div class="input-group">
+                            <label for="moment-d">Hebelarm d [m]</label>
+                            <input type="number" id="moment-d" step="any" required placeholder="z.B. 3">
+                        </div>
+                        <div class="btn-row">
+                            <button type="submit" class="btn-primary">Berechnen</button>
+                            <button type="reset" class="btn-secondary">Zurücksetzen</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="task-result" id="result-moment"></div>
+            </div>
+        </section>
+
+        <!-- Flächenträgheitsmoment -->
+        <section id="task-flaechentraegheit" class="view task-view">
+            <nav class="breadcrumb">
+                <button class="back-btn" data-back>← Übersicht</button>
+                <span>Flächenträgheitsmoment</span>
+            </nav>
+            <div class="task-layout">
+                <div class="task-input">
+                    <h2>Flächenträgheitsmoment</h2>
+                    <div class="toggle-row">
+                        <button class="toggle-btn active" data-toggle="rechteck" data-group="querschnitt">Rechteck</button>
+                        <button class="toggle-btn" data-toggle="kreis" data-group="querschnitt">Kreis</button>
+                    </div>
+                    <form id="form-flaechentraegheit" class="input-form">
+                        <div id="inputs-rechteck">
+                            <div class="sketch">
+                                <pre>
+       ┌──── b ────┐
+       │           │
+       │     ──    │ h
+       │           │
+       └───────────┘
+  Iy = b·h³/12   Iz = h·b³/12
+                                </pre>
+                            </div>
+                            <div class="input-group">
+                                <label for="ft-b">Breite b [mm]</label>
+                                <input type="number" id="ft-b" step="any" placeholder="z.B. 100">
+                            </div>
+                            <div class="input-group">
+                                <label for="ft-h">Höhe h [mm]</label>
+                                <input type="number" id="ft-h" step="any" placeholder="z.B. 200">
+                            </div>
+                        </div>
+                        <div id="inputs-kreis" class="hidden">
+                            <div class="sketch">
+                                <pre>
+          ╭───╮
+         │  d  │
+          ╰───╯
+     I = π·d⁴/64
+                                </pre>
+                            </div>
+                            <div class="input-group">
+                                <label for="ft-d">Durchmesser d [mm]</label>
+                                <input type="number" id="ft-d" step="any" placeholder="z.B. 100">
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button type="submit" class="btn-primary">Berechnen</button>
+                            <button type="reset" class="btn-secondary">Zurücksetzen</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="task-result" id="result-flaechentraegheit"></div>
+            </div>
+        </section>
+
+        <!-- Normalspannung -->
+        <section id="task-spannung" class="view task-view">
+            <nav class="breadcrumb">
+                <button class="back-btn" data-back>← Übersicht</button>
+                <span>Normalspannung</span>
+            </nav>
+            <div class="task-layout">
+                <div class="task-input">
+                    <h2>Normalspannung bei Biegung</h2>
+                    <div class="sketch">
+                        <pre>
+  σ = M / W
+  W = I / e  (Widerstandsmoment)
+                        </pre>
+                    </div>
+                    <form id="form-spannung" class="input-form">
+                        <div class="input-group">
+                            <label for="sp-M">Biegemoment M [kNm]</label>
+                            <input type="number" id="sp-M" step="any" required placeholder="z.B. 50">
+                        </div>
+                        <div class="input-group">
+                            <label for="sp-W">Widerstandsmoment W [cm³]</label>
+                            <input type="number" id="sp-W" step="any" required placeholder="z.B. 300">
+                        </div>
+                        <div class="btn-row">
+                            <button type="submit" class="btn-primary">Berechnen</button>
+                            <button type="reset" class="btn-secondary">Zurücksetzen</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="task-result" id="result-spannung"></div>
+            </div>
+        </section>
+
+        <!-- Durchbiegung -->
+        <section id="task-durchbiegung" class="view task-view">
+            <nav class="breadcrumb">
+                <button class="back-btn" data-back>← Übersicht</button>
+                <span>Durchbiegung</span>
+            </nav>
+            <div class="task-layout">
+                <div class="task-input">
+                    <h2>Maximale Durchbiegung</h2>
+                    <div class="toggle-row">
+                        <button class="toggle-btn active" data-toggle="gleichlast" data-group="lastfall">Gleichlast</button>
+                        <button class="toggle-btn" data-toggle="einzellast" data-group="lastfall">Einzellast (Mitte)</button>
+                    </div>
+                    <form id="form-durchbiegung" class="input-form">
+                        <div id="inputs-gleichlast">
+                            <div class="sketch">
+                                <pre>
+   ↓ ↓ ↓ ↓ ↓ ↓ ↓  q
+   ┌─────────────┐
+   △             ▽
+   ←──── L ────→
+  f = 5·q·L⁴ / (384·E·I)
+                                </pre>
+                            </div>
+                            <div class="input-group">
+                                <label for="db-q">Streckenlast q [kN/m]</label>
+                                <input type="number" id="db-q" step="any" placeholder="z.B. 5">
+                            </div>
+                        </div>
+                        <div id="inputs-einzellast" class="hidden">
+                            <div class="sketch">
+                                <pre>
+        F
+        ↓
+   ┌────┼────────┐
+   △    L/2      ▽
+   ←──── L ────→
+  f = F·L³ / (48·E·I)
+                                </pre>
+                            </div>
+                            <div class="input-group">
+                                <label for="db-F">Einzellast F [kN]</label>
+                                <input type="number" id="db-F" step="any" placeholder="z.B. 10">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="db-L">Trägerlänge L [m]</label>
+                            <input type="number" id="db-L" step="any" required placeholder="z.B. 6">
+                        </div>
+                        <div class="input-group">
+                            <label for="db-E">E-Modul E [N/mm²]</label>
+                            <input type="number" id="db-E" step="any" required placeholder="z.B. 210000" value="210000">
+                        </div>
+                        <div class="input-group">
+                            <label for="db-I">Trägheitsmoment I [cm⁴]</label>
+                            <input type="number" id="db-I" step="any" required placeholder="z.B. 2000">
+                        </div>
+                        <div class="btn-row">
+                            <button type="submit" class="btn-primary">Berechnen</button>
+                            <button type="reset" class="btn-secondary">Zurücksetzen</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="task-result" id="result-durchbiegung"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Statik-Aufgaben — Schnelle Berechnungen für die Baustatik</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
